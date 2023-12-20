@@ -10,11 +10,11 @@ def index():
 
 @app.route('/process', methods=['POST'])
 def process():
-    obstacles = request.form['obstacles']
-    nrow = request.form['rows']
-    ncol = request.form['columns']
-    start = request.form['start']
-    goal = request.form['goal']
+    obstacles = eval(request.form['obstacles'])
+    nrow = int(request.form['rows'])
+    ncol = int(request.form['columns'])
+    start = eval(request.form['start'])
+    goal = eval(request.form['goal'])
 
     print("Obstacles:", obstacles)
     print("Rows:", nrow)
