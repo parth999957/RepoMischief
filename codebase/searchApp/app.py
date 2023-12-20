@@ -20,6 +20,8 @@ def process():
     print("Start:", start)
     print("Goal:", goal)
 
+
+
     # Return some response or render a template
     return "Form submitted! Check console for output."
 
