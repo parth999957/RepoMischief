@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+from main import Navigate
+from map import MAP
 
 app = Flask(__name__)
 
@@ -9,17 +11,20 @@ def index():
 @app.route('/process', methods=['POST'])
 def process():
     obstacles = request.form['obstacles']
-    rows = request.form['rows']
-    columns = request.form['columns']
+    nrow = request.form['rows']
+    ncol = request.form['columns']
     start = request.form['start']
     goal = request.form['goal']
 
     print("Obstacles:", obstacles)
-    print("Rows:", rows)
-    print("Columns:", columns)
+    print("Rows:", nrow)
+    print("Columns:", ncol)
     print("Start:", start)
     print("Goal:", goal)
 
+    maps = MAP(nrow, ncol, start, goal, obstacles)
+    navigation = Navigate(maps)
+    navigation.search_astar()
 
 
     # Return some response or render a template
