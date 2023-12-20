@@ -42,8 +42,8 @@ class Navigate(object):
         parent_map= {start:None}; self.parent_map = parent_map
         Q = [start]
 
-        fig = maps.plot_map()
-        fig.show(True)
+        # Initialize Plotly figure
+        maps.plot_map()
 
         while Q != []:
             # exploit frontier
@@ -85,6 +85,8 @@ class Navigate(object):
             parent = parent_map[child]
 
         print("cost_map = ", cost_map)
+        return maps.fig  # Return the updated Plotly figure
+
 
 
     def get_heuristic_cost(self, x,y):

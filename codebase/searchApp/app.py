@@ -24,11 +24,11 @@ def process():
 
     maps = MAP(nrow, ncol, start, goal, obstacles)
     navigation = Navigate(maps)
-    navigation.search_BFS()
+    fig = navigation.search_BFS()
 
-    plt.show()
     # Return some response or render a template
-    return "Form submitted! Check console for output."
+    plot_html = fig.to_html(full_html=False)
+    return render_template('plot_display.html', plot_html=plot_html)
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=False)

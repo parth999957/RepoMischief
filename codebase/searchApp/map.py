@@ -1,67 +1,59 @@
-import matplotlib
-# matplotlib.use('Agg')
-matplotlib.use('TkAgg')  # Switch to an interactive backend
-
-from matplotlib import pyplot as plt
-import numpy as np
+import plotly.graph_objects as go
 
 class MAP(object):
     def __init__(self, nrow, ncol, start, goal, obstacles):
         self.nrow = nrow
         self.ncol = ncol
-        self.start=start
+        self.start = start
         self.goal = goal
-        self.obstacles=obstacles
+        self.obstacles = obstacles
+        self.fig = None  # Initialize the figure
 
     def plot_map(self):
-        plt.ion()
-        fig = plt.figure(figsize=(8,8))
-        self.fig = fig
-        ax  = fig.gca()
-        ax.grid(True)
-        ax.axis([0,self.ncol,0,self.nrow])
-        ax.set_xticks(np.arange(0,self.ncol,1))
-        ax.set_yticks(np.arange(0,self.nrow,1))
-        ax.set_aspect('equal')
-        for i in self.obstacles:
-            rect = plt.Rectangle(i,1,1, alpha=0.7, facecolor='black')
-            ax.add_patch(rect)
-        # start
-        x,y= self.start
-        rect_start = plt.Rectangle((x,y),1,1, alpha=1, facecolor='green')
-        ax.add_patch(rect_start)
-        ax.text(x+0.35, y+0.2, 'S', fontsize=30)
-        #goal
-        x,y= self.goal
-        rect_goal  = plt.Rectangle((x,y),1,1, alpha=1, facecolor='orange')
-        ax.add_patch(rect_goal)
-        ax.text(x+0.35, y+0.2, 'G', fontsize=30)####
-        # plt.waitforbuttonpress()
+        # Create a Plotly figure
+        self.fig = go.Figure()
 
-        plt.pause(0.0001)
-        return fig
+        # Add grid lines
+        for x in range(self.ncol + 1):
+            self.fig.add_shape(type="line", x0=x, y0=0, x1=x, y1=self.nrow,
+                               line=dict(color="LightGrey", width=2))
+        for y in range(self.nrow + 1):
+            self.fig.add_shape(type="line", x0=0, y0=y, x1=self.ncol, y1=y,
+                               line=dict(color="LightGrey", width=2))
 
+        # Add obstacles, start, and goal
+        for obs in self.obstacles:
+            self.fig.add_trace(go.Scatter(x=[obs[0]+0.5], y=[obs[1]+0.5],
+                                          mode='markers',
+                                          marker=dict(color='black', size=10)))
+        self.fig.add_trace(go.Scatter(x=[self.start[0]+0.5], y=[self.start[1]+0.5],
+                                      mode='markers',
+                                      marker=dict(color='green', size=12)))
+        self.fig.add_trace(go.Scatter(x=[self.goal[0]+0.5], y=[self.goal[1]+0.5],
+                                      mode='markers',
+                                      marker=dict(color='orange', size=12)))
 
-    def set_node(self,x,y,state,g=None,h=None,f=None, stop=False):
-        ax = self.fig.gca()
-        xy = [patch.xy for patch in ax.patches]
-        # t = [ax.patches.pop(index) for index, patch in enumerate(ax.patches) if patch.xy == (x,y)]
+        # Set layout
+        self.fig.update_layout(showlegend=False,
+                               xaxis=dict(showgrid=False, range=[0, self.ncol]),
+                               yaxis=dict(showgrid=False, range=[0, self.nrow]),
+                               width=800, height=800)
+        return self.fig
 
-        ax.add_patch(plt.Rectangle((x,y),1,1, alpha=1, facecolor=state))
+    def set_node(self, x, y, state, g=None, h=None, f=None, stop=False):
+        # Choose color based on the state
+        color = {'red': 'red', 'green': 'lightgreen', 'blue': 'blue'}[state]
+        self.fig.add_trace(go.Scatter(x=[x+0.5], y=[y+0.5],
+                                      mode='markers',
+                                      marker=dict(color=color, size=8)))
 
-        fontsize = 120/self.nrow
+        # Add text for g, h, and f values
         if g is not None:
-            ax.text(x+0.7,  y+0.7, '%.1f'%g, fontsize=fontsize/1.5)####
+            self.fig.add_annotation(x=x+0.7, y=y+0.7, text='%.1f' % g,
+                                    showarrow=False, font=dict(size=12))
         if f is not None:
-            ax.text(x+0.35, y+0.2, '%.1f'%f, fontsize=fontsize)####
+            self.fig.add_annotation(x=x+0.35, y=y+0.2, text='%.1f' % f,
+                                    showarrow=False, font=dict(size=12))
         if h is not None:
-            ax.text(x+0.1,  y+0.7, '%.1f'%h, fontsize=fontsize/1.5)####
-
-        plt.pause(0.0001)
-        # plt.waitforbuttonpress()
-        if stop==True:
-            plt.waitforbuttonpress()
-
-
-
-
+            self.fig.add_annotation(x=x+0.1, y=y+0.7, text='%.1f' % h,
+                                    showarrow=False, font=dict(size=12))
