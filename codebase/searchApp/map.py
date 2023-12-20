@@ -1,4 +1,7 @@
-#%%
+import matplotlib
+# matplotlib.use('Agg')
+matplotlib.use('TkAgg')  # Switch to an interactive backend
+
 from matplotlib import pyplot as plt
 import numpy as np
 

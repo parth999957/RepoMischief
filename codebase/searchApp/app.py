@@ -11,8 +11,8 @@ def index():
 @app.route('/process', methods=['POST'])
 def process():
     obstacles = eval(request.form['obstacles'])
-    nrow = int(request.form['rows'])
-    ncol = int(request.form['columns'])
+    nrow = eval(request.form['rows'])
+    ncol = eval(request.form['columns'])
     start = eval(request.form['start'])
     goal = eval(request.form['goal'])
 
@@ -24,11 +24,11 @@ def process():
 
     maps = MAP(nrow, ncol, start, goal, obstacles)
     navigation = Navigate(maps)
-    navigation.search_astar()
+    navigation.search_BFS()
 
-
+    plt.show()
     # Return some response or render a template
     return "Form submitted! Check console for output."
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=False)

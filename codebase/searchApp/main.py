@@ -12,6 +12,9 @@ class Navigate(object):
     def get_neighbour_costs_bfs(self, vertex):
         cost_map = self.cost_map
         action_cost = self.action_cost
+        ncol = self.navigation_map.ncol
+        nrow = self.navigation_map.nrow
+        obstacles =self.navigation_map.obstacles
 
         neighbour_costs = {}
         x = vertex[0]
@@ -34,6 +37,7 @@ class Navigate(object):
         ### starting BFS Algorithm
         maps = self.navigation_map
         start = maps.start
+        goal = maps.goal
         cost_map  = {start:0}; self.cost_map = cost_map
         parent_map= {start:None}; self.parent_map = parent_map
         Q = [start]
@@ -92,6 +96,9 @@ class Navigate(object):
         cost_map = self.cost_map
         action_cost = self.action_cost
         get_heuristic_cost = self.get_heuristic_cost
+        ncol = self.navigation_map.ncol
+        nrow = self.navigation_map.nrow
+        obstacles =self.navigation_map.obstacles
 
         neighbour_costs = {}
         x = vertex[0]
@@ -158,7 +165,6 @@ class Navigate(object):
             if neighbour == goal:
                 break
 
-
         # retrace path
         parent = goal
         while parent is not None:
@@ -175,17 +181,4 @@ if __name__ == "__main__":
     nrow = 10; ncol = 10; start = (0,0); goal = (5,5); obstacles = [(1,2)]
     maps = MAP(nrow, ncol, start, goal, obstacles)
     navigation = Navigate(maps)
-    navigation.search_astar()
-
-
-
-
-
-
-
-
-
-
-
-
-
+    navigation.search_BFS()
