@@ -1,37 +1,27 @@
-# from flask import Flask, render_template, request
+from flask import Flask, render_template, request
 
-# # app = Flask(__name__)
-
-# # @app.route('/', methods = ["POST", "GET"])  
-# # def login():
-# #     ocoords = request.form(['obstacles'])
-# #     rows = request.form(['rows'])
-# #     cols = request.form(['columns'])
-# #     start = request.form(['start'])
-# #     goal = request.form(['goal'])
-# #     return render_template("index.html")   
-
-
-
-from flask import Flask, redirect, url_for, request
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return render_template('form.html')
 
-@app.route('/BFS/<name>')
-def success(name):
-    return 'welcome %s' % name
+@app.route('/process', methods=['POST'])
+def process():
+    obstacles = request.form['obstacles']
+    rows = request.form['rows']
+    columns = request.form['columns']
+    start = request.form['start']
+    goal = request.form['goal']
 
+    print("Obstacles:", obstacles)
+    print("Rows:", rows)
+    print("Columns:", columns)
+    print("Start:", start)
+    print("Goal:", goal)
 
-@app.route('/', methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        user = request.form['obstacles']
-        return redirect(url_for('success', name=user))
-    else:
-        user = request.args.get('obstacles')
-        return redirect(url_for('success', name=user))
-
+    # Return some response or render a template
+    return "Form submitted! Check console for output."
 
 if __name__ == '__main__':
     app.run(debug=True)
-
