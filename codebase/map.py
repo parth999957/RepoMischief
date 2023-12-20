@@ -35,7 +35,7 @@ class MAP(object):
         ax.text(x+0.35, y+0.2, 'G', fontsize=30)####
         # plt.waitforbuttonpress()
 
-        plt.pause(0.1)
+        plt.pause(0.0001)
         return fig
 
 
@@ -54,7 +54,7 @@ class MAP(object):
         if h is not None:
             ax.text(x+0.1,  y+0.7, '%.1f'%h, fontsize=fontsize/1.5)####
 
-        plt.pause(0.2)
+        plt.pause(0.0001)
         # plt.waitforbuttonpress()
         if stop==True:
             plt.waitforbuttonpress()
